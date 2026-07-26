@@ -7,7 +7,7 @@ import com.youflex.dto.admin.AdminAnswerDTO;
 import com.youflex.dto.qna.QnaDTO;
 import com.youflex.mapper.admin.AdminAnswerMapper;
 import com.youflex.mapper.qna.QnaMapper;
-import com.youflex.service.NotificationsService;
+import com.youflex.service.notification.NotificationsService;
 
 /**
  * 관리자 답변(AdminAnswer) 관련 비즈니스 로직

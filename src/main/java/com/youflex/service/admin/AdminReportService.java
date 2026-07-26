@@ -9,20 +9,20 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.youflex.dto.CommentReportDTO;
-import com.youflex.dto.QnaCommentReportDTO;
-import com.youflex.dto.QnaReportDTO;
-import com.youflex.dto.ReportDTO;
-import com.youflex.dto.ReviewReportDTO;
-import com.youflex.mapper.CommentMapper;
-import com.youflex.mapper.CommentReportMapper;
-import com.youflex.mapper.QnaCommentReportMapper;
-import com.youflex.mapper.QnaReportMapper;
-import com.youflex.mapper.ReviewMapper;
-import com.youflex.mapper.ReviewReportMapper;
+import com.youflex.dto.comment.CommentReportDTO;
+import com.youflex.dto.qna.QnaCommentReportDTO;
+import com.youflex.dto.qna.QnaReportDTO;
+import com.youflex.dto.admin.ReportDTO;
+import com.youflex.dto.review.ReviewReportDTO;
+import com.youflex.mapper.comment.CommentMapper;
+import com.youflex.mapper.comment.CommentReportMapper;
+import com.youflex.mapper.qna.QnaCommentReportMapper;
+import com.youflex.mapper.qna.QnaReportMapper;
+import com.youflex.mapper.review.ReviewMapper;
+import com.youflex.mapper.review.ReviewReportMapper;
 import com.youflex.mapper.qna.QnaCommentMapper;
 import com.youflex.mapper.qna.QnaMapper;
-import com.youflex.service.NotificationsService;
+import com.youflex.service.notification.NotificationsService;
 
 import lombok.RequiredArgsConstructor;
 

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import com.youflex.dto.qna.QnaDTO;
 import com.youflex.mapper.qna.QnaMapper;
-import com.youflex.service.BadWordService;
+import com.youflex.service.admin.BadWordService;
 
 /**
  * Q&A(질문) 관련 비즈니스 로직

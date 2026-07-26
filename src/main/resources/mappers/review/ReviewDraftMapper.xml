@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.youflex.mapper.ReviewDraftMapper">
+<mapper namespace="com.youflex.mapper.review.ReviewDraftMapper">
 
 	<!--[추가된 부분] 회원별 임시저장 개수 조회(5개 제한 체크용)-->
 	<select id="countDraftByMemberId" parameterType="int" resultType="int">
@@ -10,7 +10,7 @@
 	</select>
 	
 	<!-- 2. 신규 임시저장 (INSERT) - PK(reviewDraftId) 자동 채움 -->
-	<insert id="insertDraft" parameterType="com.youflex.dto.ReviewDraftDTO" useGeneratedKeys="true" keyProperty="reviewDraftId">
+	<insert id="insertDraft" parameterType="com.youflex.dto.review.ReviewDraftDTO" useGeneratedKeys="true" keyProperty="reviewDraftId">
 		INSERT INTO review_draft (
 			member_id,
 			review_draft_title,
@@ -27,7 +27,7 @@
 	</insert>
 	
 	<!--기존 임시저장 덮어쓰기-->
-	<update id="updateDraft" parameterType="com.youflex.dto.ReviewDraftDTO">
+	<update id="updateDraft" parameterType="com.youflex.dto.review.ReviewDraftDTO">
 		UPDATE review_draft
 		SET review_draft_title = #{reviewDraftTitle},
 			review_draft_content = #{reviewDraftContent},
@@ -39,7 +39,7 @@
 	
 
 	<!-- 4. 특정 임시저장 단건 상세 조회 -->
-	<select id="selectDraftById" parameterType="int" resultType="com.youflex.dto.ReviewDraftDTO">
+	<select id="selectDraftById" parameterType="int" resultType="com.youflex.dto.review.ReviewDraftDTO">
 		SELECT 
 			review_draft_id AS reviewDraftId,
 			member_id AS memberId,
@@ -52,7 +52,7 @@
 	</select>
 
 	<!-- 5. 특정 회원의 임시저장 목록 전체 조회 (최신순 정렬 추가) -->
-	<select id="selectDraftListByMemberId" parameterType="int" resultType="com.youflex.dto.ReviewDraftDTO">
+	<select id="selectDraftListByMemberId" parameterType="int" resultType="com.youflex.dto.review.ReviewDraftDTO">
 		SELECT 
 			review_draft_id AS reviewDraftId,
 			member_id AS memberId,
