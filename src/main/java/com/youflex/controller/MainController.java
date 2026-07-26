@@ -8,9 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.youflex.dto.ReviewDTO;
-import com.youflex.service.BannerService;
-import com.youflex.service.ReviewListService;
+import com.youflex.dto.review.ReviewDTO;
+import com.youflex.service.admin.BannerService;
+import com.youflex.service.review.ReviewListService;
 import com.youflex.service.notice.NoticeService;
 
 import lombok.RequiredArgsConstructor;

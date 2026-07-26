@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.youflex.dto.admin.WarningDTO;
-import com.youflex.mapper.MemberMapper;
+import com.youflex.mapper.member.MemberMapper;
 import com.youflex.mapper.admin.WarningMapper;
-import com.youflex.service.NotificationsService;
+import com.youflex.service.notification.NotificationsService;
 import com.youflex.service.PointService;
 
 import lombok.RequiredArgsConstructor;
