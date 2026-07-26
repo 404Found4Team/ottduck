@@ -6,10 +6,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.youflex.dto.MemberDTO;
+import com.youflex.dto.member.MemberDTO;
 import com.youflex.dto.PageInfo;
 import com.youflex.dto.PointHistoryDTO;
-import com.youflex.mapper.MemberMapper;
+import com.youflex.mapper.member.MemberMapper;
 import com.youflex.mapper.PointHistoryMapper;
 
 import lombok.RequiredArgsConstructor;

@@ -1,0 +1,21 @@
+package com.youflex.dto.review;
+
+import java.time.LocalDateTime;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ReviewDraftDTO {
+    private int reviewDraftId;
+    private int memberId;
+    private String reviewDraftTitle;
+    private String reviewDraftContent;
+    private LocalDateTime reviewDraftSavedAt;
+    private String reviewDraftRelated;
+}

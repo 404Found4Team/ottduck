@@ -9,14 +9,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.youflex.dto.MemberDTO;
-import com.youflex.dto.ReportDTO;
+import com.youflex.dto.member.MemberDTO;
+import com.youflex.dto.admin.ReportDTO;
 import com.youflex.dto.qna.QnaDTO;
-import com.youflex.service.BadWordService;
-import com.youflex.service.BannerService;
+import com.youflex.service.admin.BadWordService;
+import com.youflex.service.admin.BannerService;
 import com.youflex.service.admin.AdminReportService;
 import com.youflex.service.admin.AdminStatsService;
-import com.youflex.service.MemberService;
+import com.youflex.service.member.MemberService;
 import com.youflex.service.qna.QnaService;
 
 import jakarta.servlet.http.HttpSession;
