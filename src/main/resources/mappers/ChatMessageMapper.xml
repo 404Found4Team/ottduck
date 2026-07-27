@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.youflex.mapper.ChatMessageMapper">
+<mapper namespace="com.youflex.mapper.chat.ChatMessageMapper">
 
 	<insert id="insertChatMessage" useGeneratedKeys="true"
 		keyProperty="chatMessageId">
@@ -14,10 +14,11 @@
 	     - 서브쿼리가 NULL을 반환하면(해당 방에 '참여중' 상태로 없는 회원) 비교가 항상 거짓이 되어
 	       메시지가 하나도 내려가지 않는다 (참여하지 않은 회원에게 내용 노출 방지) -->
 	<select id="getMessagesByChatroomId"
-		resultType="com.youflex.dto.ChatMessageDTO"> SELECT cm.chat_message_id
+		resultType="com.youflex.dto.chat.ChatMessageDTO"> SELECT cm.chat_message_id
 		AS chatMessageId, cm.chatroom_id AS chatroomId, cm.member_id AS
 		memberId, m.member_name AS memberName, <!-- ★ member 테이블에서 이름을 가져와서 DTO의
-		memberName에 매핑 --> cm.chat_message_content AS
+		memberName에 매핑 --> m.member_profile_img AS memberProfileImg, <!-- ★
+		마이페이지 프로필 사진과 연동 --> cm.chat_message_content AS
 		chatMessageContent, cm.chat_message_created_at AS chatMessageCreatedAt
 		FROM chat_message cm JOIN member m ON cm.member_id = m.member_id <!-- ★
 		회원 테이블과 JOIN --> WHERE
@@ -36,8 +37,15 @@
 		FROM member -- 회원 테이블명
 		WHERE member_id = #{memberId}
 	</select>
+
+	<!-- ★ 실시간 메시지 브로드캐스트 시 프로필 사진(마이페이지와 동일한 member_profile_img)을 채워 보내기 위한 단건 조회 -->
+	<select id="selectMemberProfileImg" resultType="string">
+		SELECT member_profile_img
+		FROM member
+		WHERE member_id = #{memberId}
+	</select>
 	<!-- ★ 경고 부여용: 특정 메시지 단건 조회 (작성자/방 확인) -->
-	<select id="selectChatMessageById" resultType="com.youflex.dto.ChatMessageDTO">
+	<select id="selectChatMessageById" resultType="com.youflex.dto.chat.ChatMessageDTO">
 		SELECT
 			chat_message_id AS chatMessageId,
 			chatroom_id AS chatroomId,

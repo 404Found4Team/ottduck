@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.youflex.dto.MemberDTO;
+import com.youflex.dto.member.MemberDTO;
 import com.youflex.dto.notice.NoticeDTO;
 import com.youflex.service.notice.NoticeService;
 import com.youflex.service.qna.QnaService;

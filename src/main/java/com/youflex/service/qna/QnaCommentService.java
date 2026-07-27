@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import com.youflex.dto.qna.QnaCommentDTO;
 import com.youflex.mapper.qna.QnaCommentMapper;
-import com.youflex.service.BadWordService;
+import com.youflex.service.admin.BadWordService;
 
 /**
  * Q&A 댓글(QnaComment) 관련 비즈니스 로직
