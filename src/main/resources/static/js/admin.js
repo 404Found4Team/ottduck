@@ -185,44 +185,6 @@ function renderMemberRow(m) {
   return tr;
 }
 
-// 회원 목록 페이지네이션 - 10페이지씩 블록으로 묶어서 표시하고, 블록 단위(«/»)로 한 번에 이동하는 버튼 제공
-const MEMBER_PAGE_BLOCK_SIZE = 10;
-
-function renderMemberPagination(totalPages, currentPage) {
-  const paginationEl = document.getElementById("memberPagination");
-  if (!paginationEl) return;
-  paginationEl.innerHTML = "";
-
-  const currentBlock = Math.ceil(currentPage / MEMBER_PAGE_BLOCK_SIZE);
-  const blockStart = (currentBlock - 1) * MEMBER_PAGE_BLOCK_SIZE + 1;
-  const blockEnd = Math.min(blockStart + MEMBER_PAGE_BLOCK_SIZE - 1, totalPages);
-
-  // 이전 10페이지 블록으로 이동 (첫 블록이면 눌러도 어차피 갈 곳이 없으므로 숨김)
-  const prevBtn = document.createElement("button");
-  prevBtn.type = "button";
-  prevBtn.textContent = "«";
-  prevBtn.hidden = blockStart === 1;
-  prevBtn.addEventListener("click", () => loadMemberList(blockStart - 1));
-  paginationEl.appendChild(prevBtn);
-
-  for (let i = blockStart; i <= blockEnd; i++) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.textContent = i;
-    btn.className = i === currentPage ? "active" : "";
-    btn.addEventListener("click", () => loadMemberList(i));
-    paginationEl.appendChild(btn);
-  }
-
-  // 다음 10페이지 블록으로 이동 (마지막 블록이면 눌러도 어차피 갈 곳이 없으므로 숨김)
-  const nextBtn = document.createElement("button");
-  nextBtn.type = "button";
-  nextBtn.textContent = "»";
-  nextBtn.hidden = blockEnd === totalPages;
-  nextBtn.addEventListener("click", () => loadMemberList(blockEnd + 1));
-  paginationEl.appendChild(nextBtn);
-}
-
 async function loadMemberList(page) {
   memberListState.page = page || 1;
   const tbody = document.getElementById("memberListBody");
@@ -236,7 +198,7 @@ async function loadMemberList(page) {
     } else {
       data.members.forEach((m) => tbody.appendChild(renderMemberRow(m)));
     }
-    renderMemberPagination(data.totalPages, data.page);
+    renderPagination(document.getElementById("memberPagination"), data.page, data.totalPages, loadMemberList);
   } catch (e) {
     alert(e.message);
   }
@@ -260,7 +222,7 @@ async function loadMemberList(page) {
   // 서버가 최초 렌더한 1페이지 기준 총 개수/페이지 크기로 페이지네이션 버튼만 먼저 그림
   const totalCount = Number(table.dataset.totalCount || 0);
   const pageSize = Number(table.dataset.pageSize || 10);
-  renderMemberPagination(Math.max(1, Math.ceil(totalCount / pageSize)), 1);
+  renderPagination(document.getElementById("memberPagination"), 1, Math.max(1, Math.ceil(totalCount / pageSize)), loadMemberList);
 })();
 
 // ---- 경고 처리 모달 (회원 관리 탭 / 신고 처리 탭 공용) ----
@@ -511,50 +473,7 @@ function openReportWarningModal(btn) {
   document.getElementById("warningModalBackdrop").classList.add("open");
 }
 
-// 신고 목록을 10개 단위로 나눠 보여주는 클라이언트 페이지네이션.
-// 서버가 신고 목록 전체를 이미 SSR로 다 내려주므로(별도 페이징 API 없음), tbody의
-// <tr>들을 그룹으로 나눠 display만 토글하는 방식으로 처리한다 (notice.js와 동일한 패턴).
-function initTablePagination(tbodyId, paginationId, pageSize) {
-  const tbody = document.getElementById(tbodyId);
-  const paginationEl = document.getElementById(paginationId);
-  if (!tbody || !paginationEl) return;
-
-  const rows = Array.from(tbody.children).filter((tr) => !tr.querySelector("td[colspan]"));
-  const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
-
-  let currentPage = 1;
-
-  function createPageBtn(label, extraClass, onClick) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = extraClass ? `page-btn ${extraClass}` : "page-btn";
-    btn.textContent = label;
-    btn.addEventListener("click", onClick);
-    return btn;
-  }
-
-  function render() {
-    rows.forEach((tr, i) => {
-      const page = Math.floor(i / pageSize) + 1;
-      tr.style.display = page === currentPage ? "" : "none";
-    });
-
-    paginationEl.innerHTML = "";
-    paginationEl.appendChild(createPageBtn("‹", "prev", () => currentPage > 1 && goTo(currentPage - 1)));
-    for (let i = 1; i <= totalPages; i++) {
-      paginationEl.appendChild(createPageBtn(i, i === currentPage ? "active" : "", () => goTo(i)));
-    }
-    paginationEl.appendChild(createPageBtn("›", "next", () => currentPage < totalPages && goTo(currentPage + 1)));
-  }
-
-  function goTo(page) {
-    currentPage = page;
-    render();
-  }
-
-  render();
-}
-
+// 신고 목록 페이지네이션: app.js의 공통 initTablePagination 사용 (notice.js와 동일한 패턴 공유)
 initTablePagination("reportListBody", "reportPagination", 10);
 initTablePagination("resolvedReportListBody", "resolvedReportPagination", 10);
 
