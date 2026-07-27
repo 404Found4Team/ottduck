@@ -199,6 +199,29 @@ img { max-width: 100%; display: block; }             /* 이미지가 부모 영�
 .category-nav a:hover { background: var(--bg-2); color: var(--text-0); }
 .category-nav a.active { background: var(--accent); color: #fff; } /* 현재 선택된 카테고리 강조 */
 
+/* [수정] 다른 메뉴(전체/넷플릭스 등)는 기본은 평범하고 눌렀을 때(active)만 빨갛게 강조되는 패턴인데,
+   하이라이트 메뉴는 반대로(기본이 화려하고 active가 평범) 되어 있었던 문제 수정.
+   -> 기본 상태는 아이콘 + 살짝 포인트 색만 주고, active(클릭) 상태에 화려한 그라데이션/발광 효과를 몰아줌 */
+.category-nav ul li a.highlight {
+  color: #ff8a00;
+  font-weight: 700;
+}
+.category-nav ul li a.highlight::before {
+  content: "🔥";
+  margin-right: 4px;
+}
+/* 하이라이트 버튼을 클릭해 active(선택)됐을 때만 그라데이션 배경 + 발광 애니메이션으로 특별하게 강조 */
+.category-nav ul li a.highlight.active {
+  background: linear-gradient(90deg, #ff3d3d, #ff8a00);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255, 87, 34, 0.6);
+  animation: highlightPulse 1.8s ease-in-out infinite;
+}
+@keyframes highlightPulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(255, 87, 34, 0.45); }
+  50% { box-shadow: 0 0 16px rgba(255, 87, 34, 0.9); }
+}
+
 /* "인기 리뷰글", "공지사항" 같은 섹션 제목 + 오른쪽 "더보기" 링크 한 줄 */
 .section-title {
   display: flex;
