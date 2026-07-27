@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
-import com.youflex.dto.MemberDTO;
+import com.youflex.dto.member.MemberDTO;
 import com.youflex.dto.notice.NoticeDTO;
 import com.youflex.service.notice.NoticeService;
 import jakarta.servlet.http.HttpSession;

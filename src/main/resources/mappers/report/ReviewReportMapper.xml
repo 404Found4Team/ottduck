@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.youflex.mapper.ReviewReportMapper">
+<mapper namespace="com.youflex.mapper.review.ReviewReportMapper">
 
-    <resultMap id="reviewReportResultMap" type="com.youflex.dto.ReviewReportDTO">
+    <resultMap id="reviewReportResultMap" type="com.youflex.dto.review.ReviewReportDTO">
         <id property="reviewReportId" column="review_report_id" />
         <result property="reviewId" column="review_id" />
         <result property="memberId" column="member_id" />
@@ -41,10 +41,17 @@
     </update>
 
     <!-- 게시글 신고 등록 - review_report_status는 컬럼 DEFAULT('접수') 사용 -->
-    <insert id="insertReport" parameterType="com.youflex.dto.ReviewReportDTO">
+    <insert id="insertReport" parameterType="com.youflex.dto.review.ReviewReportDTO">
         INSERT INTO review_report (review_id, member_id, review_report_reason, review_report_content)
         VALUES (#{reviewId}, #{memberId}, #{reviewReportReason}, #{reviewReportContent})
     </insert> <!-- 댓글과 동일하게 오류나면 수정 -->
+    <!-- 중복 신고 방지 - 이 회원이 이 게시글을 신고한 기록이 있는지(처리 상태 무관) -->
+    <select id="existsReport" resultType="int">
+        SELECT COUNT(*)
+        FROM review_report
+        WHERE review_id = #{reviewId}
+          AND member_id = #{memberId}
+    </select>
     <!-- 처리완료 탭 - 신고 기록 자체 완전 삭제(원본 게시글과는 무관) -->
     <delete id="deleteReviewReport" parameterType="int">
         DELETE FROM review_report

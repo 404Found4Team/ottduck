@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.RequiredArgsConstructor;
 import com.youflex.dto.qna.QnaDTO;
 import com.youflex.dto.admin.AdminAnswerDTO;
-import com.youflex.dto.MemberDTO;
+import com.youflex.dto.member.MemberDTO;
 import com.youflex.service.qna.QnaService;
 import com.youflex.service.qna.QnaCommentService;
 import com.youflex.service.admin.AdminAnswerService;

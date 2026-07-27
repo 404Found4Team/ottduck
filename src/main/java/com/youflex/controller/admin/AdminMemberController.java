@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.youflex.dto.MemberDTO;
+import com.youflex.dto.member.MemberDTO;
 import com.youflex.dto.PageInfo;
-import com.youflex.service.MemberService;
+import com.youflex.service.member.MemberService;
 import com.youflex.service.admin.WarningService;
 
 import jakarta.servlet.http.HttpSession;
