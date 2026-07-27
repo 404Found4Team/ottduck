@@ -125,7 +125,7 @@ function loadHighlightPosts(page) {
       } else {
         data.reviews.forEach((review) => highlightPostList.appendChild(renderHighlightPostRow(review)));
       }
-      renderPagination(highlightPostPagination, data.totalPages, data.page, loadHighlightPosts);
+      renderPagination(highlightPostPagination, data.page, data.totalPages, loadHighlightPosts);
     })
     .catch(() => {
       highlightPostList.innerHTML = '<div class="text-muted" style="text-align:center;padding:24px 0">내 글을 불러오지 못했습니다.</div>';
@@ -333,40 +333,6 @@ function renderMyPostRow(review) {
   return row;
 }
 
-// 페이지 버튼(이전/숫자/다음) 공통 렌더러. 내 글/북마크/포인트 내역 탭이 모두 공유해서 쓴다.
-// 페이지가 1개뿐이어도 항상 보여주고, 버튼 클릭 시 onPageClick(page)로 페이지 이동을 위임한다.
-function renderPagination(container, totalPages, currentPage, onPageClick) {
-  container.innerHTML = '';
-
-  const prevBtn = document.createElement('button');
-  prevBtn.className = 'page-btn prev';
-  prevBtn.setAttribute('aria-label', '이전 페이지');
-  prevBtn.textContent = '‹';
-  prevBtn.disabled = currentPage <= 1;
-  prevBtn.addEventListener('click', () => onPageClick(currentPage - 1));
-  container.appendChild(prevBtn);
-
-  for (let i = 1; i <= totalPages; i++) {
-    const btn = document.createElement('button');
-    btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
-    btn.textContent = i;
-    btn.addEventListener('click', () => onPageClick(i));
-    container.appendChild(btn);
-  }
-
-  const nextBtn = document.createElement('button');
-  nextBtn.className = 'page-btn next';
-  nextBtn.setAttribute('aria-label', '다음 페이지');
-  nextBtn.textContent = '›';
-  nextBtn.disabled = currentPage >= totalPages;
-  nextBtn.addEventListener('click', () => onPageClick(currentPage + 1));
-  container.appendChild(nextBtn);
-}
-
-function renderMyPostsPagination(totalPages, currentPage) {
-  renderPagination(myPostsPagination, totalPages, currentPage, loadMyPosts);
-}
-
 function loadMyPosts(page) {
   fetch(`/mypage/reviews?page=${page}`)
     .then((res) => {
@@ -380,7 +346,7 @@ function loadMyPosts(page) {
       } else {
         data.reviews.forEach((review) => myPostsList.appendChild(renderMyPostRow(review)));
       }
-      renderMyPostsPagination(data.totalPages, data.page);
+      renderPagination(myPostsPagination, data.page, data.totalPages, loadMyPosts);
     })
     .catch(() => {
       myPostsList.innerHTML = '<div class="text-muted" style="text-align:center;padding:24px 0">내 글을 불러오지 못했습니다.</div>';
@@ -447,7 +413,7 @@ function loadMyBookmarks(page) {
       } else {
         data.bookmarks.forEach((bookmark) => myBookmarksList.appendChild(renderBookmarkRow(bookmark)));
       }
-      renderPagination(myBookmarksPagination, data.totalPages, data.page, loadMyBookmarks);
+      renderPagination(myBookmarksPagination, data.page, data.totalPages, loadMyBookmarks);
     })
     .catch(() => {
       myBookmarksList.innerHTML = '<div class="text-muted" style="text-align:center;padding:24px 0">북마크 목록을 불러오지 못했습니다.</div>';
@@ -502,7 +468,7 @@ function loadMyPoints(page) {
       } else {
         data.history.forEach((h) => myPointsBody.appendChild(renderPointRow(h)));
       }
-      renderPagination(myPointsPagination, data.totalPages, data.page, loadMyPoints);
+      renderPagination(myPointsPagination, data.page, data.totalPages, loadMyPoints);
     })
     .catch(() => {
       myPointsBody.innerHTML = '<tr><td colspan="4" class="text-muted" style="text-align:center;padding:24px 0">포인트 내역을 불러오지 못했습니다.</td></tr>';
