@@ -199,6 +199,48 @@ img { max-width: 100%; display: block; }             /* 이미지가 부모 영�
 .category-nav a:hover { background: var(--bg-2); color: var(--text-0); }
 .category-nav a.active { background: var(--accent); color: #fff; } /* 현재 선택된 카테고리 강조 */
 
+/* ---------- 하이라이트 메뉴 전용 불꽃 효과 ----------
+   [이동] 원래 list.css에만 있어서 list 화면에서만 보였음. category-nav는 fragments/layout.html
+   공통 프래그먼트라 모든 화면에서 쓰이므로, common.css로 옮겨서 main 화면 등에도 공통 적용되게 함.
+   (list.css에서 이 자리로 원본 그대로, 셀렉터를 나누지 않고 통째로 이동) */
+.category-nav ul li a.highlight {
+  /* 1. 불꽃 그라데이션 텍스트 (딥레드 -> 주황 -> 노랑) */
+  background: linear-gradient(180deg, #ff0000 0%, #ff6600 50%, #ffcc00 100%) !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+
+  /* 2. 기존 다른 메뉴들과 위치/크기 정렬 맞춤 */
+  font-weight: 700 !important;
+
+  /* 3. 불꽃 일렁임 네온 애니메이션 */
+  animation: flameGlow 1.2s infinite alternate ease-in-out !important;
+}
+
+/* 2. '하이라이트'버튼만 active 되었을 때 추천 배경색(흰색) 적용 */
+.sort-group .highlight.active,
+.sort-group button.highlight.active,
+.category-nav ul li a.highlight.active {
+  /* 하이라이트 버튼 전용 배경 */
+  background: #ffffff !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: initial !important;
+
+  /* 다크 배경용 텍스트 */
+  color: #ffaa00 !important;
+}
+
+/* 불꽃 빛남 키프레임 (레이아웃 틀어짐을 방지하기 위해 크기 변형 제거) */
+@keyframes flameGlow {
+  0% {
+    filter: drop-shadow(0 0 1px rgba(255, 68, 0, 0.5));
+  }
+  100% {
+    filter: drop-shadow(0 0 6px rgba(255, 102, 0, 0.9))
+            drop-shadow(0 0 12px rgba(255, 0, 0, 0.7));
+  }
+}
+
 /* "인기 리뷰글", "공지사항" 같은 섹션 제목 + 오른쪽 "더보기" 링크 한 줄 */
 .section-title {
   display: flex;
