@@ -175,14 +175,15 @@
 		<div class="pagination mt-16" th:if="${totalPages != null and totalPages > 0}"
 			th:attr="data-total-pages=${totalPages},data-block-start=${blockStart},data-block-end=${blockEnd}">
 			<!-- [수정] 관리자 회원관리 탭과 동일한 구조로 변경: 1페이지씩 이동하던 ‹/› 대신
-			     10페이지 블록 단위로 이동하는 «/» + 블록 내 숫자 버튼만 표시 -->
-			<button type="button" class="page-btn block-prev" aria-label="이전 10페이지" th:disabled="${blockStart <= 1}">«</button>
+			     10페이지 블록 단위로 이동하는 «/» + 블록 내 숫자 버튼만 표시
+			     [수정] 이동할 블록이 없으면 비활성화 대신 버튼 자체를 안 그림 -->
+			<button type="button" class="page-btn block-prev" aria-label="이전 10페이지" th:if="${blockStart > 1}">«</button>
 
 			<button type="button" th:each="pageNumber : ${#numbers.sequence(blockStart, blockEnd)}"
 				th:class="${pageNumber == currentPage} ? 'page-btn active' : 'page-btn'"
 				th:text="${pageNumber}">1</button>
 
-			<button type="button" class="page-btn block-next" aria-label="다음 10페이지" th:disabled="${blockEnd >= totalPages}">»</button>
+			<button type="button" class="page-btn block-next" aria-label="다음 10페이지" th:if="${blockEnd < totalPages}">»</button>
 		</div>
 
 	</main>

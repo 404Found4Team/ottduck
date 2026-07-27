@@ -536,6 +536,119 @@ const observer = new IntersectionObserver((entries) => {
 
 headings.forEach(h => observer.observe(h));
 
+// ==========================================================================
+// 공통 페이지네이션 (10페이지 블록 단위 «/» + 블록 내 숫자 버튼)
+// list/mypage/admin/notice/qna가 각자 다른 방식(전체 페이지 나열, 1페이지씩 이동 등)으로
+// 따로 구현돼 있던 것을 review/list.html의 블록 방식으로 통일한 공통 버전.
+// ==========================================================================
+const PAGINATION_BLOCK_SIZE = 10;
+
+/**
+ * @param {HTMLElement} container .pagination 요소 (button.page-btn들이 이 안에 그려짐)
+ * @param {number} currentPage 현재 페이지 (1부터 시작)
+ * @param {number} totalPages 전체 페이지 수
+ * @param {(page:number)=>void} onNavigate 페이지/블록 버튼 클릭 시 이동할 페이지 번호와 함께 호출되는 콜백
+ */
+function renderPagination(container, currentPage, totalPages, onNavigate) {
+    if (!container) return;
+    container.innerHTML = "";
+    totalPages = Math.max(1, totalPages || 1);
+
+    const blockStart = Math.floor((currentPage - 1) / PAGINATION_BLOCK_SIZE) * PAGINATION_BLOCK_SIZE + 1;
+    const blockEnd = Math.min(blockStart + PAGINATION_BLOCK_SIZE - 1, totalPages);
+
+    function createPageBtn(label, extraClass, onClick) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = extraClass ? `page-btn ${extraClass}` : "page-btn";
+        btn.textContent = label;
+        btn.addEventListener("click", onClick);
+        return btn;
+    }
+
+    // 이동할 이전/다음 블록이 없으면 비활성화 대신 버튼 자체를 그리지 않음
+    if (blockStart > 1) {
+        container.appendChild(createPageBtn("«", "block-prev", () => onNavigate(blockStart - 1)));
+    }
+    for (let i = blockStart; i <= blockEnd; i++) {
+        container.appendChild(createPageBtn(i, i === currentPage ? "active" : "", () => onNavigate(i)));
+    }
+    if (blockEnd < totalPages) {
+        container.appendChild(createPageBtn("»", "block-next", () => onNavigate(blockEnd + 1)));
+    }
+}
+
+/**
+ * 서버가 목록 전체를 이미 SSR로 다 내려준 화면(별도 페이징 API 없음)에서, tbody의 <tr>들을
+ * pageSize 단위로 나눠 display만 토글하는 클라이언트 페이지네이션. (notice.js/admin.js 신고 탭 공용)
+ * searchInputId/matchRow를 넘기면 검색어에 매칭되는 행만 걸러서 페이지네이션한다.
+ */
+function initTablePagination(tbodyId, paginationId, pageSize, searchInputId, matchRow) {
+    const tbody = document.getElementById(tbodyId);
+    const paginationEl = document.getElementById(paginationId);
+    if (!tbody || !paginationEl) return;
+
+    // "등록된 ~이 없습니다" 안내 행(colspan)은 검색/페이지 계산에서 제외
+    const allRows = Array.from(tbody.children).filter((tr) => !tr.querySelector("td[colspan]"));
+    const columnCount = tbody.closest("table").querySelectorAll("thead th").length;
+
+    let rows = allRows;
+    let currentPage = 1;
+    let currentKeyword = "";
+    let noResultRow = null;
+
+    function ensureNoResultRow() {
+        if (noResultRow) return noResultRow;
+        noResultRow = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = columnCount;
+        td.style.textAlign = "center";
+        td.style.color = "var(--text-2)";
+        td.textContent = "검색 결과가 없습니다.";
+        noResultRow.appendChild(td);
+        tbody.appendChild(noResultRow);
+        return noResultRow;
+    }
+
+    function render() {
+        const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        allRows.forEach((tr) => { tr.style.display = "none"; });
+        rows.forEach((tr, i) => {
+            const page = Math.floor(i / pageSize) + 1;
+            tr.style.display = page === currentPage ? "" : "none";
+        });
+
+        if (currentKeyword !== "" && rows.length === 0) {
+            ensureNoResultRow().style.display = "";
+        } else if (noResultRow) {
+            noResultRow.style.display = "none";
+        }
+
+        renderPagination(paginationEl, currentPage, totalPages, goTo);
+    }
+
+    function goTo(page) {
+        currentPage = page;
+        render();
+    }
+
+    function applyFilter(keyword) {
+        currentKeyword = keyword.trim().toLowerCase();
+        rows = currentKeyword === "" ? allRows : allRows.filter((tr) => matchRow(tr, currentKeyword));
+        currentPage = 1;
+        render();
+    }
+
+    render();
+
+    const searchInput = searchInputId && document.getElementById(searchInputId);
+    if (searchInput && matchRow) {
+        searchInput.addEventListener("input", () => applyFilter(searchInput.value));
+    }
+}
+
 // ---- 푸터: 맨 위로 가기 버튼 ----
 const footerTopBtn = document.getElementById("footerTopBtn");
 if (footerTopBtn) {
