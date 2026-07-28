@@ -34,20 +34,12 @@
 /* ---------- 평균 별점 + 내 별점 매기기 ---------- */
 .rating-block { display:flex; align-items:center; gap:14px; margin:10px 0; }
 .rating-block .rating-label { font-size:16px; font-weight:600; color:var(--text-2);}
-.rating-block .score { font-size:28px; letter-spacing:3px; color:var(--gold); display: inline-block;
-background: linear-gradient(90deg, #ffffff 0%, #ffd47a 60%, var(--accent) 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: heading-shine 4s ease-in-out infinite, heading-fade-in 0.6s ease-out;} 
-.rating-block .stars { font-size:24px; font-weight:800; color:var(--gold);display: inline-block; 
-background: linear-gradient(90deg, #ffffff 0%, #ffd47a 60%, var(--accent) 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: heading-shine 4s ease-in-out infinite, heading-fade-in 0.6s ease-out;}
+/* [수정] 별점(★/☆) 애니메이션/그라데이션 효과 제거 + 단색 노란색으로 변경 요청으로 수정.
+   평점이 0이면 th:each 조건(i <= round(rating))이 항상 false라 전부 '☆'(테두리만 있는 별)로
+   렌더링되므로, 별도 처리 없이 color만 지정해도 0점일 때 테두리만 보이는 별로 표시됨 */
+.rating-block .score { font-size:28px; letter-spacing:3px; color:var(--gold); display: inline-block; }
+/* [수정] 숫자 평점도 별점과 동일하게 그라데이션/올라오는 애니메이션 제거 + 단색 노란색으로 변경 */
+.rating-block .stars { font-size:24px; font-weight:800; color:var(--gold); display: inline-block; }
 /* ---------- 리뷰 본문 (대표 이미지 + 텍스트 + 관련작품 뱃지) ---------- */
 
 /* 사진 영역 수정완료 */ 
@@ -133,15 +125,4 @@ background: linear-gradient(90deg, #ffffff 0%, #ffd47a 60%, var(--accent) 100%);
 .report-modal .form-row textarea { min-height:120px; }                              /* common.css 기본 textarea(min-height:280px)보다 작게 - 신고 상세 내용은 짧으니까 */
 .btn-row .btn { flex:1; } /* 신고 모달의 "취소/신고하기" 버튼을 폭 절반씩 꽉 채워서 배치 */
 
-
-/* 그라데이션이 천천히 좌우로 움직이는 효과 (불꽃이 일렁이는 느낌) */
-@keyframes heading-shine {
-  0%, 100% { background-position: 0% center; }
-  50% { background-position: 100% center; }
-}
-
-/* 페이지 들어올 때 제목이 살짝 아래에서 떠오르며 나타나는 효과 */
-@keyframes heading-fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+/* [삭제] heading-shine / heading-fade-in 키프레임 - 별점/숫자 평점 애니메이션 제거로 더 이상 쓰는 곳이 없어 삭제 */
