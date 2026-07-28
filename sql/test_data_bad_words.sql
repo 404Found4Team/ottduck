@@ -2,10 +2,10 @@
 -- 금칙어 필터(bad_word) 테스트용 더미 데이터
 -- 리뷰/댓글/Q&A 작성 시 필터링 동작을 확인하기 위한 단어 목록
 --
--- 실행: MySQL Workbench/DBeaver 등에서 youflex 스키마 선택 후 전체 실행
+-- 실행: MySQL Workbench/DBeaver 등에서 ottduck 스키마 선택 후 전체 실행
 -- ============================================================
 
-USE youflex;
+USE ottduck;
 
 -- (선택) 재실행 전 이전 테스트 데이터 정리하고 싶으면 아래 주석 해제
 -- bad_word_content에 unique 제약이 없어서 재실행 시 중복 등록될 수 있음

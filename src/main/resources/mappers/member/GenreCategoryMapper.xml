@@ -3,9 +3,9 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.youflex.mapper.GenreCategoryMapper">
+<mapper namespace="com.ottduck.mapper.GenreCategoryMapper">
 
-    <select id="findAll" resultType="com.youflex.dto.GenreCategoryDTO">
+    <select id="findAll" resultType="com.ottduck.dto.GenreCategoryDTO">
         SELECT *
         FROM genre_category
         ORDER BY genre_category_id

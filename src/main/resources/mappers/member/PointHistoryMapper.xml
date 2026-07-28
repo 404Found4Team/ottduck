@@ -3,15 +3,15 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.youflex.mapper.PointHistoryMapper">
+<mapper namespace="com.ottduck.mapper.PointHistoryMapper">
 
-    <insert id="insertPointHistory" parameterType="com.youflex.dto.PointHistoryDTO">
+    <insert id="insertPointHistory" parameterType="com.ottduck.dto.PointHistoryDTO">
         INSERT INTO point_history (member_id, point_history_amount, point_history_type, point_history_reason)
         VALUES (#{memberId}, #{pointHistoryAmount}, #{pointHistoryType}, #{pointHistoryReason})
     </insert>
 
     <!-- 오래된 순으로 조회 - PointService가 앞에서부터 누적 합산해서 각 건의 잔액을 계산함 -->
-    <select id="findByMemberId" resultType="com.youflex.dto.PointHistoryDTO">
+    <select id="findByMemberId" resultType="com.ottduck.dto.PointHistoryDTO">
         SELECT *
         FROM point_history
         WHERE member_id = #{memberId}

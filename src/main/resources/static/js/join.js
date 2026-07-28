@@ -1,82 +1,84 @@
-const idInput = document.getElementById('member_loginid');
-const idStatus = document.getElementById('idStatus');
-// 중복확인을 통과한 값인지 추적. 값을 바꾸면(아래 input 리스너) 다시 false로 풀려서 재확인을 강제함.
-let idChecked = false;
-document.getElementById('idCheckBtn').addEventListener('click', () => {
-  const loginId = idInput.value.trim();  // idInput 값을 loginId 에 담음
-  if (!loginId) { // loginId가 존재하지 않으면 발동
-    // 중복확인 전용 아이디 값을 입력 했는지
-    idStatus.textContent = '아이디를 입력해주세요.';
-    idStatus.className = 'id-status no';
-    idChecked = false;
-    return;
-  }
-  // 데모용 하드코딩 대신 MemberController의 /join/check-id를 호출해 실제 DB 기준으로 확인
-  fetch('/join/check-id?loginId=' + encodeURIComponent(loginId))
-    .then((res) => {
-      // res.ok를 확인하지 않으면 서버 에러(500 등)까지 "이미 사용 중"으로 잘못 표시됨
-      // (data.available이 undefined라 falsy로 취급되던 버그)
-      if (!res.ok) throw new Error('check-id request failed');
-      return res.json();
-    })
-    // data : 콜백의 매개변수 이름, res.json()이 파싱한 { available: true/false } 객체
-    .then((data) => {
-      // available 값에 따라 성공/중복 메시지 표시
-      if (data.available) {
-        idStatus.textContent = '사용 가능한 아이디입니다.';
-        idStatus.className = 'id-status ok';
-        idChecked = true;
-      } else {
-        idStatus.textContent = '이미 사용 중인 아이디입니다.';
-        idStatus.className = 'id-status no';
-        idChecked = false;
-      }
-    })
-    .catch(() => {
-      idStatus.textContent = '중복확인 중 오류가 발생했습니다.';
-      idStatus.className = 'id-status no';
-      idChecked = false;
-    });
-});
-// 중복확인 통과 후 아이디를 다시 수정하면 이전 확인 결과는 무효화
-idInput.addEventListener('input', () => { idChecked = false; });
+// 아이디/이메일 중복확인 공용 로직(예전엔 두 필드가 거의 같은 코드를 각각 들고 있었음, 하나로 합침).
+// 레이스 컨디션 방지: 응답이 도착한 시점에 입력값이 이미 바뀌었으면 그 응답은 버리고,
+// isChecked()도 "마지막으로 확인 성공한 값 === 지금 입력값"까지 같이 봐서 이중으로 막는다.
+function setupDuplicateCheck({ inputId, statusId, buttonId, endpoint, paramName, emptyMessage, availableMessage, takenMessage, errorMessage }) {
+  const input = document.getElementById(inputId);
+  const status = document.getElementById(statusId);
+  let checked = false;
+  let checkedValue = null; // 마지막으로 '사용 가능' 확인에 성공한 값
 
-const emailInput = document.getElementById('member_email');
-const emailStatus = document.getElementById('emailStatus');
-let emailChecked = false;
-document.getElementById('emailCheckBtn').addEventListener('click', () => {
-  const email = emailInput.value.trim();
-  if (!email) {
-    emailStatus.textContent = '이메일을 입력해주세요.';
-    emailStatus.className = 'id-status no';
-    emailChecked = false;
-    return;
+  function setStatus(message, ok) {
+    status.textContent = message;
+    status.className = 'id-status ' + (ok ? 'ok' : 'no');
   }
-  // 데모용 하드코딩 대신 MemberController의 /join/check-email를 호출해 실제 DB 기준으로 확인
-  fetch('/join/check-email?email=' + encodeURIComponent(email))
-    .then((res) => {
-      if (!res.ok) throw new Error('check-email request failed');
-      return res.json();
-    })
-    .then((data) => {
-      if (data.available) {
-        emailStatus.textContent = '사용 가능한 이메일입니다.';
-        emailStatus.className = 'id-status ok';
-        emailChecked = true;
-      } else {
-        emailStatus.textContent = '이미 사용 중인 이메일입니다.';
-        emailStatus.className = 'id-status no';
-        emailChecked = false;
-      }
-    })
-    .catch(() => {
-      emailStatus.textContent = '중복확인 중 오류가 발생했습니다.';
-      emailStatus.className = 'id-status no';
-      emailChecked = false;
-    });
+
+  document.getElementById(buttonId).addEventListener('click', () => {
+    const value = input.value.trim();
+    if (!value) {
+      setStatus(emptyMessage, false);
+      checked = false;
+      return;
+    }
+    fetch(`${endpoint}?${paramName}=` + encodeURIComponent(value))
+      .then((res) => {
+        // res.ok를 확인하지 않으면 서버 에러(500 등)까지 "이미 사용 중"으로 잘못 표시됨
+        // (data.available이 undefined라 falsy로 취급되던 버그)
+        if (!res.ok) throw new Error('duplicate check request failed');
+        return res.json();
+      })
+      .then((data) => {
+        if (input.value.trim() !== value) return; // 응답 도착 전에 값이 바뀜 -> 이 응답은 지금과 무관하니 버림
+        if (data.available) {
+          setStatus(availableMessage, true);
+          checked = true;
+          checkedValue = value;
+        } else {
+          setStatus(takenMessage, false);
+          checked = false;
+          checkedValue = null;
+        }
+      })
+      .catch(() => {
+        if (input.value.trim() !== value) return;
+        setStatus(errorMessage, false);
+        checked = false;
+        checkedValue = null;
+      });
+  });
+
+  // 중복확인 통과 후 값을 다시 수정하면 이전 확인 결과는 무효화(재확인 강제)
+  input.addEventListener('input', () => { checked = false; });
+
+  return {
+    input,
+    status,
+    isChecked: () => checked && checkedValue === input.value.trim(),
+  };
+}
+
+const idCheck = setupDuplicateCheck({
+  inputId: 'member_loginid',
+  statusId: 'idStatus',
+  buttonId: 'idCheckBtn',
+  endpoint: '/join/check-id',
+  paramName: 'loginId',
+  emptyMessage: '아이디를 입력해주세요.',
+  availableMessage: '사용 가능한 아이디입니다.',
+  takenMessage: '이미 사용 중인 아이디입니다.',
+  errorMessage: '중복확인 중 오류가 발생했습니다.',
 });
-// 중복확인 통과 후 이메일을 다시 수정하면 이전 확인 결과는 무효화
-emailInput.addEventListener('input', () => { emailChecked = false; });
+
+const emailCheck = setupDuplicateCheck({
+  inputId: 'member_email',
+  statusId: 'emailStatus',
+  buttonId: 'emailCheckBtn',
+  endpoint: '/join/check-email',
+  paramName: 'email',
+  emptyMessage: '이메일을 입력해주세요.',
+  availableMessage: '사용 가능한 이메일입니다.',
+  takenMessage: '이미 사용 중인 이메일입니다.',
+  errorMessage: '중복확인 중 오류가 발생했습니다.',
+});
 
 const pwInput = document.getElementById('member_pwd');
 const pwConfirmInput = document.getElementById('pwConfirmInput');
@@ -120,16 +122,16 @@ document.getElementById('signupForm').addEventListener('submit', (e) => {
   e.preventDefault();
 
   // 중복확인 버튼을 안 눌렀거나(또는 확인 후 값을 바꿔서) 통과 상태가 아니면 제출 자체를 막음
-  if (!idChecked) {
-    idStatus.textContent = '아이디 중복확인을 먼저 해주세요.';
-    idStatus.className = 'id-status no';
-    idInput.focus();
+  if (!idCheck.isChecked()) {
+    idCheck.status.textContent = '아이디 중복확인을 먼저 해주세요.';
+    idCheck.status.className = 'id-status no';
+    idCheck.input.focus();
     return;
   }
-  if (!emailChecked) {
-    emailStatus.textContent = '이메일 중복확인을 먼저 해주세요.';
-    emailStatus.className = 'id-status no';
-    emailInput.focus();
+  if (!emailCheck.isChecked()) {
+    emailCheck.status.textContent = '이메일 중복확인을 먼저 해주세요.';
+    emailCheck.status.className = 'id-status no';
+    emailCheck.input.focus();
     return;
   }
 
@@ -166,7 +168,13 @@ genreGrid.querySelectorAll('.genre-chip').forEach((chip) => {
 
 // 장르 선택 모달의 "완료"/"나중에 설정하기" 클릭 시 선택된 장르 id를 hidden input으로 담아
 // 실제 회원가입 폼(/join)을 제출. 선택을 안 했으면(스킵) 장르 없이 그대로 제출됨.
+// signupSubmitting: 두 버튼을 빠르게 연타하면 finishSignup이 중복 실행되어 같은 genreCategoryIds가
+// hidden input으로 두 번 쌓인 채 제출될 수 있었던 문제(member_mapping의 uq_member_mapping UNIQUE
+// 제약 위반으로 이어질 수 있음) 방지용 가드.
+let signupSubmitting = false;
 function finishSignup() {
+  if (signupSubmitting) return;
+  signupSubmitting = true;
   const form = document.getElementById('signupForm');
   genreGrid.querySelectorAll('.genre-chip.selected').forEach((chip) => {
     const hidden = document.createElement('input');

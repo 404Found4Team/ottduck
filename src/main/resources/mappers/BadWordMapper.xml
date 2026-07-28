@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.youflex.mapper.admin.BadWordMapper">
+<mapper namespace="com.ottduck.mapper.admin.BadWordMapper">
 
-    <resultMap id="badWordResultMap" type="com.youflex.dto.admin.BadWordDTO">
+    <resultMap id="badWordResultMap" type="com.ottduck.dto.admin.BadWordDTO">
         <id property="badWordId" column="bad_word_id" />
         <result property="badWordContent" column="bad_word_content" />
     </resultMap>
@@ -14,7 +14,7 @@
         ORDER BY bad_word_id DESC
     </select>
 
-    <insert id="insertBadWord" parameterType="com.youflex.dto.admin.BadWordDTO" useGeneratedKeys="true" keyProperty="badWordId">
+    <insert id="insertBadWord" parameterType="com.ottduck.dto.admin.BadWordDTO" useGeneratedKeys="true" keyProperty="badWordId">
         INSERT INTO bad_word (bad_word_content)
         VALUES (#{badWordContent})
     </insert>

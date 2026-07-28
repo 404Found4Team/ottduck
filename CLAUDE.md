@@ -1,4 +1,4 @@
-# youflex 프로젝트 가이드
+# ottduck 프로젝트 가이드
 
 이 문서는 팀원들이 각자 Claude Code로 작업할 때 동일한 기준으로 동작하도록 만든 공용 지침서입니다.
 모든 팀원의 Claude Code는 프로젝트를 열 때 이 파일을 자동으로 읽습니다.
@@ -7,7 +7,7 @@
 
 - Spring Boot + MyBatis + Thymeleaf 기반 웹 서비스
 - 사용하는 기술 스택 : MyBatis, Thymeleaf, lombok, WebSocket, mysql, spring
-- 패키지 구조 (`com.youflex`)
+- 패키지 구조 (`com.ottduck`)
   - `controller` : REST API 컨트롤러 (`@RestController`), 화면 렌더링 컨트롤러 (`*ViewController`)
   - `service` : 인터페이스 + `*ServiceImpl` 구현체로 분리
   - `mapper` : MyBatis 매퍼 인터페이스 (`@Mapper`)
