@@ -5,14 +5,18 @@
 
 <mapper namespace="com.youflex.mapper.quiz.QuizMapper">
 
-    <!-- 이 회원이 방금 직전에 응시한 문제(quiz_attempt 최신 1건)는 제외하고 뽑아서 같은 문제가 연속으로 나오지 않게 함 -->
+    <!-- 이 회원이 방금 직전에 응시한 문제(quiz_attempt 최신 1건)는 제외하고 뽑아서 같은 문제가 연속으로 나오지 않게 함.
+         단, quiz 테이블에 문제가 1개(또는 방금 그 문제 하나)뿐이면 제외 조건 때문에 0건이 되어 버려서
+         남은 횟수가 있는데도 "문제 없음"으로 잘못 표시되는 문제가 있었음 -> 전체 문제 수가 1개 이하일 때는
+         제외하지 않고 그대로 내려주도록 보정 -->
     <select id="selectRandomQuiz" resultType="com.youflex.dto.quiz.QuizDTO">
         SELECT *
         FROM quiz
-        WHERE quiz_id != COALESCE(
-            (SELECT quiz_id FROM quiz_attempt WHERE member_id = #{memberId} ORDER BY quiz_attempt_attempted_at DESC LIMIT 1),
-            0
-        )
+        WHERE (SELECT COUNT(*) FROM quiz) &lt;= 1
+           OR quiz_id != COALESCE(
+                (SELECT quiz_id FROM quiz_attempt WHERE member_id = #{memberId} ORDER BY quiz_attempt_attempted_at DESC LIMIT 1),
+                0
+            )
         ORDER BY RAND()
         LIMIT 1
     </select>
