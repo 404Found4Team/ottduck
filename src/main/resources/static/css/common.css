@@ -203,12 +203,23 @@ img { max-width: 100%; display: block; }             /* 이미지가 부모 영�
    하이라이트 메뉴는 반대로(기본이 화려하고 active가 평범) 되어 있었던 문제 수정.
    -> 기본 상태는 아이콘 + 살짝 포인트 색만 주고, active(클릭) 상태에 화려한 그라데이션/발광 효과를 몰아줌 */
 .category-nav ul li a.highlight {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: #ff8a00;
   font-weight: 700;
 }
-.category-nav ul li a.highlight::before {
-  content: "🔥";
-  margin-right: 4px;
+/* [수정] 하이라이트 -> 오덕Pick: 이모지(::before) 대신 마스코트 아이콘(img.highlight-icon) 사용.
+   기본/선택 상태 배경이 달라도 항상 잘 보이도록 흰 원형 배경을 깔아준다. */
+.category-nav ul li a.highlight .highlight-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  padding: 2px;
+  box-sizing: border-box;
+  display: block;
+  flex-shrink: 0;
 }
 /* 하이라이트 버튼을 클릭해 active(선택)됐을 때만 그라데이션 배경 + 발광 애니메이션으로 특별하게 강조 */
 .category-nav ul li a.highlight.active {
