@@ -16,7 +16,7 @@
      -->
 	<header class="site-header" th:fragment="header">
 		<div class="container">
-			<a th:href="@{/}" class="logo"><img th:src="@{/img/logo.png}" alt="YouFlex" /></a>
+			<a th:href="@{/}" class="logo"><img th:src="@{/img/logo.svg}" alt="OTT덕후" /></a>
 			<form class="search-bar" th:action="@{/review/list}" method="get">
 				<button type="submit" class="icon"
 					style="background:none; border:none; padding:0; cursor:pointer; font-size:inherit; line-height:1;">🔍</button>
@@ -60,7 +60,8 @@
 				<!-- [추가] 하이라이트 버튼: '기타' 버튼 옆으로 이동, 동일한 <li><a> 구조라 스타일 자동 동일 적용 -->
 				<!-- 삭제: <a th:href="@{/review/list(sort='highlight')}" ...>
 				     [수정] highlightOnly=true 추가 - sort='highlight'는 최초 진입 시 큐레이션 정렬 기본값용으로 유지 -->
-				<li><a th:href="@{/review/list(sort='highlight',highlightOnly=true)}" data-nav="highlight" class="highlight">하이라이트</a></li>
+				<!-- [수정] 하이라이트 -> 오덕Pick 리네이밍: 마스코트 아이콘 + 텍스트로 표시 (class/data-nav/쿼리파라미터는 JS·CSS 연동 때문에 유지) -->
+				<li><a th:href="@{/review/list(sort='highlight',highlightOnly=true)}" data-nav="highlight" class="highlight"><img th:src="@{/img/highlight-icon.svg}" alt="" class="highlight-icon" />오덕Pick</a></li>
 				<li style="margin-left:auto"><a th:href="@{/notice}" data-nav="notice">공지사항</a></li>
 				<li><a th:href="@{/notice#qna}" data-nav="qna">Q&A</a></li>
 			</ul>
@@ -75,7 +76,7 @@
 	<footer class="site-footer main-footer" th:fragment="footer">
 		<div class="container main-footer-inner">
 			<div class="main-footer-brand">
-				<span class="logo"><img th:src="@{/img/logo.png}" alt="YouFlex" />
+				<span class="logo"><img th:src="@{/img/logo.svg}" alt="OTT덕후" />
 				</span>
 				<p>
 					당신의 콘텐츠 취향을 연결하는<br />OTT 리뷰 &amp; 커뮤니티 플랫폼
