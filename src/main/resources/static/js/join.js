@@ -1,11 +1,14 @@
 const idInput = document.getElementById('member_loginid');
 const idStatus = document.getElementById('idStatus');
+// 중복확인을 통과한 값인지 추적. 값을 바꾸면(아래 input 리스너) 다시 false로 풀려서 재확인을 강제함.
+let idChecked = false;
 document.getElementById('idCheckBtn').addEventListener('click', () => {
   const loginId = idInput.value.trim();  // idInput 값을 loginId 에 담음
   if (!loginId) { // loginId가 존재하지 않으면 발동
     // 중복확인 전용 아이디 값을 입력 했는지
     idStatus.textContent = '아이디를 입력해주세요.';
     idStatus.className = 'id-status no';
+    idChecked = false;
     return;
   }
   // 데모용 하드코딩 대신 MemberController의 /join/check-id를 호출해 실제 DB 기준으로 확인
@@ -13,7 +16,7 @@ document.getElementById('idCheckBtn').addEventListener('click', () => {
     .then((res) => {
       // res.ok를 확인하지 않으면 서버 에러(500 등)까지 "이미 사용 중"으로 잘못 표시됨
       // (data.available이 undefined라 falsy로 취급되던 버그)
-      if (!res.ok) throw new Error('check-id request failed'); 
+      if (!res.ok) throw new Error('check-id request failed');
       return res.json();
     })
     // data : 콜백의 매개변수 이름, res.json()이 파싱한 { available: true/false } 객체
@@ -22,24 +25,31 @@ document.getElementById('idCheckBtn').addEventListener('click', () => {
       if (data.available) {
         idStatus.textContent = '사용 가능한 아이디입니다.';
         idStatus.className = 'id-status ok';
+        idChecked = true;
       } else {
         idStatus.textContent = '이미 사용 중인 아이디입니다.';
         idStatus.className = 'id-status no';
+        idChecked = false;
       }
     })
     .catch(() => {
       idStatus.textContent = '중복확인 중 오류가 발생했습니다.';
       idStatus.className = 'id-status no';
+      idChecked = false;
     });
 });
+// 중복확인 통과 후 아이디를 다시 수정하면 이전 확인 결과는 무효화
+idInput.addEventListener('input', () => { idChecked = false; });
 
 const emailInput = document.getElementById('member_email');
 const emailStatus = document.getElementById('emailStatus');
+let emailChecked = false;
 document.getElementById('emailCheckBtn').addEventListener('click', () => {
   const email = emailInput.value.trim();
   if (!email) {
     emailStatus.textContent = '이메일을 입력해주세요.';
     emailStatus.className = 'id-status no';
+    emailChecked = false;
     return;
   }
   // 데모용 하드코딩 대신 MemberController의 /join/check-email를 호출해 실제 DB 기준으로 확인
@@ -52,16 +62,21 @@ document.getElementById('emailCheckBtn').addEventListener('click', () => {
       if (data.available) {
         emailStatus.textContent = '사용 가능한 이메일입니다.';
         emailStatus.className = 'id-status ok';
+        emailChecked = true;
       } else {
         emailStatus.textContent = '이미 사용 중인 이메일입니다.';
         emailStatus.className = 'id-status no';
+        emailChecked = false;
       }
     })
     .catch(() => {
       emailStatus.textContent = '중복확인 중 오류가 발생했습니다.';
       emailStatus.className = 'id-status no';
+      emailChecked = false;
     });
 });
+// 중복확인 통과 후 이메일을 다시 수정하면 이전 확인 결과는 무효화
+emailInput.addEventListener('input', () => { emailChecked = false; });
 
 const pwInput = document.getElementById('member_pwd');
 const pwConfirmInput = document.getElementById('pwConfirmInput');
@@ -103,6 +118,20 @@ function openGenreModal() {
 // 폼 제출 시점에 실제로 규칙을 검사해서, 통과 못 하면 취향 선택 모달로 못 넘어가게 막음.
 document.getElementById('signupForm').addEventListener('submit', (e) => {
   e.preventDefault();
+
+  // 중복확인 버튼을 안 눌렀거나(또는 확인 후 값을 바꿔서) 통과 상태가 아니면 제출 자체를 막음
+  if (!idChecked) {
+    idStatus.textContent = '아이디 중복확인을 먼저 해주세요.';
+    idStatus.className = 'id-status no';
+    idInput.focus();
+    return;
+  }
+  if (!emailChecked) {
+    emailStatus.textContent = '이메일 중복확인을 먼저 해주세요.';
+    emailStatus.className = 'id-status no';
+    emailInput.focus();
+    return;
+  }
 
   if (pwInput.value.length < MIN_PW_LENGTH) {
     pwMatch.textContent = `비밀번호는 ${MIN_PW_LENGTH}자 이상이어야 합니다.`;
