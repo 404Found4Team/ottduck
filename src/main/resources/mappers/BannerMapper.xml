@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.youflex.mapper.admin.BannerMapper">
+<mapper namespace="com.ottduck.mapper.admin.BannerMapper">
 
-    <resultMap id="bannerResultMap" type="com.youflex.dto.admin.BannerDTO">
+    <resultMap id="bannerResultMap" type="com.ottduck.dto.admin.BannerDTO">
         <id property="bannerId" column="banner_id" />
         <result property="bannerBadge" column="banner_badge" />
         <result property="bannerTitle" column="banner_title" />
@@ -23,12 +23,12 @@
         WHERE banner_id = #{bannerId}
     </select>
 
-    <insert id="insertBanner" parameterType="com.youflex.dto.admin.BannerDTO" useGeneratedKeys="true" keyProperty="bannerId">
+    <insert id="insertBanner" parameterType="com.ottduck.dto.admin.BannerDTO" useGeneratedKeys="true" keyProperty="bannerId">
         INSERT INTO banner (banner_badge, banner_title, banner_content, banner_img)
         VALUES (#{bannerBadge}, #{bannerTitle}, #{bannerContent}, #{bannerImg})
     </insert>
 
-    <update id="updateBanner" parameterType="com.youflex.dto.admin.BannerDTO">
+    <update id="updateBanner" parameterType="com.ottduck.dto.admin.BannerDTO">
         UPDATE banner
         SET banner_badge = #{bannerBadge},
             banner_title = #{bannerTitle},

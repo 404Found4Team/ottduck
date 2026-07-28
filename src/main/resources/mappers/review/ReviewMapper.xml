@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.youflex.mapper.review.ReviewMapper">
-	<insert id="write" parameterType="com.youflex.dto.review.ReviewDTO" useGeneratedKeys="true" keyProperty="reviewId">
+<mapper namespace="com.ottduck.mapper.review.ReviewMapper">
+	<insert id="write" parameterType="com.ottduck.dto.review.ReviewDTO" useGeneratedKeys="true" keyProperty="reviewId">
 		INSERT INTO REVIEW(
 			MEMBER_ID, 
 			REVIEW_PLATFORM, 
@@ -37,7 +37,7 @@
 </insert>
 
 	<!-- 마이페이지 - 내 글 탭: 장르는 review_mapping 다대다라서 서브쿼리로 콤마 연결한 문자열 하나로 내려줌 -->
-	<select id="findByMemberId" resultType="com.youflex.dto.review.ReviewDTO">
+	<select id="findByMemberId" resultType="com.ottduck.dto.review.ReviewDTO">
 		SELECT r.*,
 			(SELECT GROUP_CONCAT(gc.genre_category_name SEPARATOR ', ')
 			   FROM review_mapping rm
@@ -56,7 +56,7 @@
 	</select>
 
 	<!-- 게시글 상세 조회 - 작성자 이름/프로필이미지/등급을 member 테이블과 join -->
-	<select id="findById" resultType="com.youflex.dto.review.ReviewDTO">
+	<select id="findById" resultType="com.ottduck.dto.review.ReviewDTO">
 		SELECT r.*,
 			m.member_name AS memberName,
 			m.member_profile_img AS memberProfileImg,
@@ -67,7 +67,7 @@
 	</select>
 
 	<!-- 게시글 상세 - 선택된 장르 태그 목록(review_mapping 다대다 조인) -->
-	<select id="findGenresByReviewId" resultType="com.youflex.dto.GenreCategoryDTO">
+	<select id="findGenresByReviewId" resultType="com.ottduck.dto.GenreCategoryDTO">
 		SELECT gc.genre_category_id, gc.genre_category_name
 		FROM review_mapping rm
 		JOIN genre_category gc ON gc.genre_category_id = rm.genre_category_id
@@ -82,7 +82,7 @@
 	</update>
 
 	<!-- 게시글 수정 - 작성자 본인 확인은 ReviewService에서, 장르는 review_mapping을 별도로 재삽입 -->
-	<update id="update" parameterType="com.youflex.dto.review.ReviewDTO">
+	<update id="update" parameterType="com.ottduck.dto.review.ReviewDTO">
 		UPDATE review
 		SET review_platform = #{reviewPlatform},
 			review_related = #{reviewRelated},

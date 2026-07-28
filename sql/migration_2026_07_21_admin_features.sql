@@ -4,11 +4,11 @@
 -- 아래 스크립트를 한 번 실행해야 배너 관리 / 누적 탈퇴자수 / 신고 처리완료
 -- 이력 보존 기능이 정상 동작함.
 --
--- 실행: MySQL Workbench/DBeaver 등에서 youflex 스키마 선택 후 전체 실행
+-- 실행: MySQL Workbench/DBeaver 등에서 ottduck 스키마 선택 후 전체 실행
 -- 이미 적용된 항목이 있으면 해당 블록만 건너뛰어도 됨(각 블록은 독립적으로 실행 가능)
 -- ============================================================
 
-USE youflex;
+USE ottduck;
 
 -- 1. 배너 관리 - 뱃지 텍스트 컬럼 추가 (관리자 배너 설정 화면)
 ALTER TABLE banner ADD COLUMN banner_badge VARCHAR(50) NOT NULL DEFAULT '' AFTER banner_title;

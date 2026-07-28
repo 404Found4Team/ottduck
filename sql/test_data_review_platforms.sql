@@ -4,10 +4,10 @@
 -- - review_hit에 서로 다른 조회수를 부여하고, review_like로 좋아요 수를 다르게 설정
 -- - member_loginid, review_title에 [TEST]를 붙여서 나중에 삭제/정리하기 쉽도록 구성
 --
--- 실행: MySQL Workbench/DBeaver 등에서 youflex 스키마 선택 후 전체 실행
+-- 실행: MySQL Workbench/DBeaver 등에서 ottduck 스키마 선택 후 전체 실행
 -- ============================================================
 
-USE youflex;
+USE ottduck;
 
 -- 데이터 재실행을 위한 정리
 DELETE rl

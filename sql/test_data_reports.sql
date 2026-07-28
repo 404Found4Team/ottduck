@@ -7,10 +7,10 @@
 -- 단, genre_category 테이블에는 최소 1건 이상 데이터가 있어야 합니다
 -- (회원가입 취향 선택 목록으로 이미 있을 가능성이 높음).
 --
--- 실행: MySQL Workbench/DBeaver 등에서 youflex 스키마 선택 후 전체 실행
+-- 실행: MySQL Workbench/DBeaver 등에서 ottduck 스키마 선택 후 전체 실행
 -- ============================================================
 
-USE youflex;
+USE ottduck;
 
 -- (선택) 재실행 전 이전 테스트 데이터 정리하고 싶으면 아래 주석 해제
 -- DELETE FROM review_report WHERE review_report_content LIKE '[TEST]%';
