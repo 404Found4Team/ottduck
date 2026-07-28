@@ -271,7 +271,7 @@ document.getElementById('saveProfileBtn').addEventListener('click', () => {
 // 회원탈퇴 2차 확인 - 확인 통과 시 실제로 /mypage/withdraw에 신청을 보냄(관리자 최종 승인/반려 전까지는 탈퇴신청 상태)
 document.getElementById('withdrawBtn').addEventListener('click', (e) => {
   e.preventDefault();
-  if (!confirm('정말 YouFlex 서비스를 탈퇴하시겠습니까?\n탈퇴 시 회원 정보 및 모든 포인트 데이터가 영구 삭제됩니다.')) return;
+  if (!confirm('정말 OTT덕후 서비스를 탈퇴하시겠습니까?\n탈퇴 시 회원 정보 및 모든 포인트 데이터가 영구 삭제됩니다.')) return;
   if (!confirm('삭제된 계정 정보는 복구할 수 없습니다.\n그래도 탈퇴를 진행하시겠습니까?')) return;
   fetch('/mypage/withdraw', { method: 'POST' })
     .then((res) => {

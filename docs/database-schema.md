@@ -1,4 +1,4 @@
-# YouFlex DB 스키마 참고 문서
+# OTT덕후 DB 스키마 참고 문서
 
 작업 전에 컬럼명/enum 값 헷갈릴 때 이 파일부터 확인할 것. DB 접속 권한이 없어서
 실제 데이터는 못 보고, 아래 DDL(사용자가 공유한 원본)만 근거로 코드를 짬.
@@ -70,10 +70,10 @@
 ## 전체 DDL (원본 그대로)
 
 ```sql
-create database youflex;
-use youflex;
+create database ottduck;
+use ottduck;
 
--- drop database youflex;
+-- drop database ottduck;
 
 -- ---------------------------------------------------------
 -- 1. 회원 도메인
