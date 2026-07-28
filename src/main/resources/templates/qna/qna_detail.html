@@ -127,7 +127,7 @@
 
       <!-- 댓글 작성 입력폼 (data-qna-id로 어느 질문에 대한 댓글인지 JS에서 참조) -->
       <form id="qnaCommentForm" class="comment-input-row" th:attr="data-qna-id=${qna.qnaId}">
-        <input type="text" id="qna_comment_content" name="qna_comment_content" maxlength="100" placeholder="댓글을 입력해 주세요." />
+        <input type="text" id="qna_comment_content" name="qna_comment_content" maxlength="100" placeholder="댓글을 입력하세요 (비속어 자동 필터링)" />
         <button type="button" class="btn btn-primary" id="commentSubmitBtn">등록</button>
       </form>
     </section>
