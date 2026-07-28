@@ -306,7 +306,11 @@ function initQnaQuiz() {
                 renderCount(data.remainingAttempts);
                 if (!data.quiz || !data.quiz.quizId) {
                     playBox.style.display = 'none';
-                    showResult('오늘 퀴즈 응시 횟수를 모두 사용했어요. 내일 다시 도전해주세요!');
+                    // remainingAttempts > 0인데 quiz가 비어 있는 경우는 "횟수 소진"이 아니라
+                    // "지금 뽑을 수 있는 문제가 없음"(예: 직전 문제 제외 로직 때문)이라 문구를 구분함
+                    showResult(data.remainingAttempts > 0
+                        ? '지금은 새로 풀 수 있는 문제가 없어요. 잠시 후 다시 시도해주세요.'
+                        : '오늘 퀴즈 응시 횟수를 모두 사용했어요. 내일 다시 도전해주세요!');
                     return;
                 }
                 currentQuiz = data.quiz;
