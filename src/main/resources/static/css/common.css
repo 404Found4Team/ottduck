@@ -1,5 +1,5 @@
 /* ==========================================================================
-   YouFlex 공통 스타일시트 (common.css)
+   OTT덕후 공통 스타일시트 (common.css)
    모든 화면(HTML)에서 <link> 로 불러다 쓰는 공통 디자인 규칙 모음입니다.
    각 화면 전용 스타일은 assets/css/화면이름.css 에 따로 있고,
    이 파일에는 "여러 화면에서 같이 쓰는" 스타일만 모아둡니다.
@@ -75,7 +75,7 @@ img { max-width: 100%; display: block; }             /* 이미지가 부모 영�
   width: 100%;
 }
 
-/* 헤더 왼쪽의 YouFlex 로고 이미지 영역 */
+/* 헤더 왼쪽의 OTT덕후 로고 이미지 영역 */
 .logo {
   display: inline-flex;
   align-items: center;
@@ -185,6 +185,8 @@ img { max-width: 100%; display: block; }             /* 이미지가 부모 영�
 }
 .category-nav ul {
   display: flex;
+  align-items: center; /* [수정] align-items 기본값(stretch)이라 오덕Pick(아이콘 포함, 높이 큼) 때문에
+    li가 다같이 늘어나면서 일반 텍스트 메뉴가 위쪽으로 붙어 줄이 안 맞던 문제 수정 */
   gap: 8px;
   padding: 10px 0;
   overflow-x: auto; /* 메뉴가 많아지면 좌우로 스크롤 가능하게 */

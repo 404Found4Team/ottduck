@@ -1,4 +1,4 @@
-# YouFlex 기획서
+# OTT덕후 기획서
 
 작업 전에 요구사항/정책 헷갈릴 때 이 파일부터 확인할 것. DB 구조는 [database-schema.md](./database-schema.md) 참고.
 

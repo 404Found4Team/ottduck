@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>YouFlex - 게시글 목록</title>
+	<title>OTT덕후 - 게시글 목록</title>
 	<link rel="stylesheet" th:href="@{/css/common.css}" />
 	<link rel="stylesheet" th:href="@{/css/list.css}" />
 </head>
@@ -24,12 +24,14 @@
 		<div class="post-row-list mt-16">
 			<!-- 등록된 공지사항이 없을 경우 안내 문구 표시 -->
 			<div class="post-row" th:if="${#lists.isEmpty(noticeList)}" style="background:var(--bg-2)">
-				<div style="flex: 1; text-align:center; color:var(--text-2, #888);">등록된 공지사항이 없습니다.</div>
+				<!-- post-row는 grid-template-columns: 90px 1fr auto라서 flex:1은 무시되고 첫 90px 칸에만
+				     들어가 글자가 좁게 줄바꿈되던 문제 수정: 3칸을 전부 차지하도록 grid-column 지정(main.html과 동일 패턴) -->
+				<div style="grid-column: 1 / -1; text-align:center; color:var(--text-2, #888);">등록된 공지사항이 없습니다.</div>
 			</div>
 			<a class="post-row" th:each="notice : ${noticeList}" th:href="@{/notice/{id}(id=${notice.noticeId})}"
 				style="background:var(--bg-2)">
 				<div class="post-row-thumb"
-					style="width:50px; height:50px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+					style="width:50px; height:50px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:transparent;">
 					<span class="badge badge-admin">공지</span>
 				</div>
 				<div style="flex: 1; margin-left: 16px;">
