@@ -11,7 +11,7 @@
 
 <!-- BasicErrorController가 넘겨주는 status(404, 500 등) 값으로 서버에서 바로 아이콘/문구를 분기 -->
 <div class="error-wrap">
-  <div class="error-logo"><a th:href="@{/}"><img th:src="@{/img/logo.png}" alt="YouFlex" /></a></div>
+  <div class="error-logo"><a th:href="@{/}"><img th:src="@{/img/logo.svg}" alt="OTT덕후" /></a></div>
   <div class="error-illust" th:text="${status == 404} ? '🛰️' : '🛠️'">🛰️</div>
   <div class="error-code" th:text="${status}">404</div>
   <div class="error-msg"
