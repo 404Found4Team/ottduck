@@ -41,7 +41,7 @@
     <div class="profile-info">
       <h2><span th:text="${myInfo.memberName}">김하늘</span> <span class="badge badge-critic" th:text="${myInfo.memberGrade}">평론가</span> <button type="button"
         class="btn btn-sm" id="rankUpBtn" th:if="${myInfo.memberGrade == '시청자'}">등업신청</button>
-         <button type="button" class="taste-btn" id="tasteBtn" style="margin-left:auto">❤️ 장르 선택</button></h2>
+         <button type="button" class="taste-btn" id="tasteBtn" style="margin-left:auto">❤️ 취향 선택</button></h2>
       <div class="text-muted" style="font-size:13px;margin-bottom:6px">가입일 <span th:text="${#temporals.format(myInfo.memberCreatedAt, 'yyyy-MM-dd')}">2025-03-12</span></div>
       <div class="flex gap-8" style="flex-wrap:wrap">
         <div class="point-chip">💰 보유 포인트 <strong th:text="${myInfo.memberPoint} + ' P'">3,420 P</strong></div>
