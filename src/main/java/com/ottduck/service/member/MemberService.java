@@ -17,6 +17,8 @@ import com.ottduck.mapper.admin.WarningMapper;
 
 import lombok.RequiredArgsConstructor;
 
+// 회원 관련 비즈니스 로직: 회원가입/로그인(일반+소셜), 마이페이지(내 정보 수정, 등업/탈퇴 신청),
+// 관리자 회원 관리(목록 조회, 등업/탈퇴 승인·반려)를 담당
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -54,6 +56,7 @@ public class MemberService {
         return member;
     }
 
+    // 회원가입 처리 - 회원 정보 저장 후, 선택한 관심 장르가 있으면 취향 매핑까지 함께 저장
     public void join(MemberDTO memberDTO, List<Integer> genreCategoryIds) {
         // 해시 없이 입력한 비밀번호를 그대로 저장(요청에 따라 해시 제거함 - 보안상 실서비스에는 부적합)
         // 폼으로 넘어온 값과 무관하게 항상 일반회원(시청자)으로 고정(관리자 자가 승격 방지).
@@ -177,10 +180,12 @@ public class MemberService {
         return memberMapper.findMembers(keyword, offset, MEMBER_PAGE_SIZE);
     }
 
+    // 회원 목록 페이징 - getMemberList와 동일한 keyword 조건으로 전체 건수 조회
     public int getMemberListTotalCount(String keyword) {
         return memberMapper.countMembers(keyword);
     }
 
+    // 회원 목록 페이지네이션 UI에서 사용할 페이지당 표시 건수
     public int getMemberPageSize() {
         return MEMBER_PAGE_SIZE;
     }
@@ -195,10 +200,12 @@ public class MemberService {
         return memberMapper.findWithdrawnMembers();
     }
 
+    // 등업 신청 승인 - member_grade를 '평론가'로 변경
     public void approveGradeUpgrade(int memberId) {
         memberMapper.approveGradeUpgrade(memberId);
     }
 
+    // 등업 신청 반려 - member_grade_status만 '반려'로 변경(등급은 그대로 유지)
     public void rejectGradeUpgrade(int memberId) {
         memberMapper.rejectGradeUpgrade(memberId);
     }
